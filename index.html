@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bússola do Dividendo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b0e11; --card-bg: #161a1e; --text-main: #e3e6e8;
+            --text-muted: #a0a7b1; --border: #2b3139; --success: #00f2a1; --danger: #ff4d6d; --warning: #ffb800;
+            --accent: #3b82f6;
+        }
+
+        [data-theme="light"] {
+            --bg: #f0f2f5; --card-bg: #ffffff; --text-main: #1e2329;
+            --text-muted: #5e6673; --border: #dcdfe4; --success: #03a66d; --danger: #cf304a; --warning: #f0b90b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text-main); padding-bottom: 110px; transition: background 0.3s; }
+        
+        .ticker-header-group { position: sticky; top: 0; z-index: 1000; background: var(--bg); width: 100%; height: 50px; border-bottom: 1px solid var(--border); }
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 10px; }
+        
+        .header { text-align: center; margin: 15px 0; }
+        .header h1 { font-size: 1.2rem; font-weight: 900; color: var(--accent); letter-spacing: -0.5px; text-transform: uppercase; }
+        .header p { font-size: 0.6rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+        
+        .btn-container { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; }
+        .btn { flex: 1; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border); padding: 8px; border-radius: 6px; font-size: 0.6rem; font-weight: 800; cursor: pointer; }
+
+        .sector-section { margin-bottom: 8px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+        .sector-header { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+        .sector-title { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
+
+        .grid { display: none; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; padding: 8px; background: var(--bg); }
+        .expanded .grid { display: grid; }
+
+        .card { background: var(--card-bg); padding: 12px 8px; border-radius: 8px; border: 1px solid var(--border); text-align: center; display: flex; flex-direction: column; align-items: center; position: relative; transition: 0.3s; }
+        .card.opportunity { animation: pulse-border 2s infinite; }
+        @keyframes pulse-border { 0%, 100% { border-color: var(--success); } 50% { border-color: var(--warning); } }
+
+        .buy-label { font-size: 0.45rem; font-weight: 800; color: var(--success); margin-bottom: 4px; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.2; } }
+        
+        .ticker-link { font-size: 0.85rem; font-weight: 800; color: var(--accent); text-decoration: none; margin-bottom: 1px; }
+        .asset-name { font-size: 0.5rem; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
+        .price { font-size: 1.1rem; font-weight: 800; margin-bottom: 2px; }
+        
+        .variation-row { font-size: 0.6rem; font-weight: 700; display: flex; gap: 4px; align-items: center; margin-bottom: 4px; }
+        .up { color: var(--success); } .down { color: var(--danger); }
+
+        /* Estrutura Compacta / Detalhes */
+        .extra-info { display: none; width: 100%; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
+        .card.show-details .extra-info { display: block; }
+        .btn-details { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-size: 0.45rem; padding: 2px 6px; border-radius: 4px; cursor: pointer; font-weight: 700; margin-top: 4px; }
+
+        .yield-chart-mini { width: 100%; height: 18px; margin-bottom: 8px; display: flex; align-items: flex-end; gap: 2px; justify-content: center; }
+        .bar { width: 3px; background: var(--accent); border-radius: 1px; opacity: 0.4; }
+        .datacom-badge { position: absolute; top: 4px; right: 4px; font-size: 0.65rem; }
+
+        .info-line { display: flex; justify-content: space-between; width: 100%; margin-bottom: 2px; }
+        .info-label { font-size: 0.42rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
+        .info-value { font-size: 0.6rem; font-weight: 800; color: var(--warning); }
+
+        .market-footer { position: fixed; bottom: 0; left: 0; right: 0; height: 95px; background: var(--card-bg); border-top: 2px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
+        .sentiment-container { width: 80%; max-width: 300px; height: 10px; background: #333; border-radius: 10px; margin: 6px 0; overflow: hidden; }
+        .sentiment-bar { height: 100%; width: 50%; background: linear-gradient(90deg, var(--danger), var(--warning), var(--success)); transition: width 1s; }
+
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr 1fr !important; } }
+    </style>
+</head>
+<body id="mainBody">
+
+<div class="ticker-header-group">
+    <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+    {"symbols": [{"proName": "BMFBOVESPA:IBOV", "title": "IBOV"},{"proName": "FX_IDC:USDBRL", "title": "USD/BRL"},{"proName": "BINANCE:BTCBRL", "title": "BTC"}],"showSymbolLogo": true, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "br"}
+    </script></div>
+</div>
+
+<div class="container">
+    <div class="header">
+        <h1>Painel de Ações e Cripto</h1>
+        <p>"Siga o fluxo inteligente do capital..."</p>
+    </div>
+    <div class="btn-container">
+        <button class="btn" onclick="toggleAll(true)">EXPANDIR TUDO</button>
+        <button class="btn" onclick="toggleAll(false)">RECOLHER TUDO</button>
+    </div>
+    <div id="dashboard-content"></div>
+</div>
+
+<div class="market-footer">
+    <div style="display: flex; gap: 10px; margin-bottom: 2px;">
+        <a href="https://g1.globo.com/economia/" target="_blank" style="color:var(--text-muted); text-decoration:none; font-size:0.55rem; font-weight:700;">► G1 ECONOMIA</a>
+        <a href="https://br.investing.com/" target="_blank" style="color:var(--text-muted); text-decoration:none; font-size:0.55rem; font-weight:700;">► INVESTING</a>
+    </div>
+    <div id="sentimentText" style="font-size: 0.5rem; font-weight: 800; text-transform: uppercase;">SENTIMENTO: NEUTRO</div>
+    <div class="sentiment-container"><div id="sentimentBar" class="sentiment-bar"></div></div>
+    <div style="display: flex; gap: 6px; align-items: center;">
+        <div id="dot" style="width: 8px; height: 8px; border-radius: 50%;"></div>
+        <span id="statusText" style="font-size: 0.6rem; font-weight: 800;">CARREGANDO...</span>
+    </div>
+</div>
+
+<script>
+    const API_TOKEN = 'nctccHqqPkRvTdxGsZeK2f';
+    
+    // Configurações de Preço Teto (Carteira Barsi & Graham)
+    const config = { 
+        "BBAS3": 28.00, "ITUB4": 32.00, "BBDC4": 14.50, "BBSE3": 33.00, "CXSE3": 15.50,
+        "PETR4": 36.00, "ELET3": 48.00, "TAEE11": 34.00, "TRPL4": 23.50, "CPLE6": 9.20,
+        "SBSP3": 75.00, "VALE3": 62.00, "KLBN11": 21.00, "MXRF11": 10.10, "HGLG11": 155.00
+    };
+
+    const sectors = {
+        "Bancos & Seguros": { "BBAS3": "Banco do Brasil", "ITUB4": "Itaú Unibanco", "BBDC4": "Bradesco", "BBSE3": "BB Seguridade", "CXSE3": "Caixa Seg" },
+        "Energia & Elétricas": { "PETR4": "Petrobras", "ELET3": "Eletrobras", "TAEE11": "Taesa", "TRPL4": "ISA CTEEP", "CPLE6": "Copel" },
+        "Saneamento & Infra": { "SBSP3": "Sabesp", "CSMG3": "Copasa", "VIVT3": "Vivo", "TIMS3": "TIM Brasil" },
+        "Commodities & Indústria": { "VALE3": "Vale S.A.", "KLBN11": "Klabin", "WEGE3": "WEG S.A.", "CSNA3": "Siderúrgica Nac" },
+        "FIIs & Imobiliário": { "MXRF11": "Maxi Renda", "HGLG11": "CSHG Log", "XPLG11": "XP Log", "KNIP11": "Kinea Índices" },
+        "Varejo & Consumo": { "ABEV3": "Ambev", "MGLU3": "Magalu", "RENT3": "Localiza" }
+    };
+
+    function applyTheme() {
+        const hour = new Date().getHours();
+        const isDay = (hour >= 6 && hour < 18);
+        if (isDay) document.getElementById('mainBody').setAttribute('data-theme', 'light');
+        else document.getElementById('mainBody').removeAttribute('data-theme');
+    }
+
+    function calcGraham(vpa, lpa) { return (vpa > 0 && lpa > 0) ? Math.sqrt(22.5 * vpa * lpa) : null; }
+
+    async function renderStocks() {
+        const container = document.getElementById('dashboard-content');
+        container.innerHTML = "";
+        let totalVar = 0, count = 0;
+
+        for (const [name, list] of Object.entries(sectors)) {
+            const id = name.replace(/\s/g, '').replace('&', '');
+            const sectorDiv = document.createElement('div');
+            sectorDiv.className = 'sector-section';
+            const size = Object.keys(list).length;
+            sectorDiv.innerHTML = `
+                <div class="sector-header" onclick="toggleSector('${id}')">
+                    <span class="sector-title">${name} (${size})</span>
+                    <span>▼</span>
+                </div>
+                <div class="grid" id="grid-${id}"></div>`;
+            container.appendChild(sectorDiv);
+            
+            const grid = document.getElementById(`grid-${id}`);
+            for (const ticker in list) {
+                try {
+                    const res = await fetch(`https://brapi.dev/api/quote/${ticker}?token=${API_TOKEN}&fundamental=true`);
+                    const data = await res.json();
+                    const asset = data.results[0];
+                    const teto = config[ticker] || 0;
+                    const preco = asset.regularMarketPrice;
+                    const isOpp = teto > 0 && preco <= teto;
+                    const isUp = asset.regularMarketChangePercent >= 0;
+                    const graham = calcGraham(asset.bookValue, asset.earningsPerShare);
+                    
+                    totalVar += asset.regularMarketChangePercent; count++;
+
+                    grid.innerHTML += `
+                        <div class="card ${isOpp ? 'opportunity' : ''}" id="card-${ticker}">
+                            ${isOpp ? `<span class="buy-label">COMPRA! ${((preco-teto)/teto*100).toFixed(1)}%</span>` : ''}
+                            ${asset.dividendYield > 8 ? '<span class="datacom-badge">💰</span>' : ''}
+                            <a href="https://www.google.com/finance/quote/${ticker}:BVMF" target="_blank" class="ticker-link">${ticker}</a>
+                            <span class="asset-name">${list[ticker]}</span>
+                            <span class="price">R$ ${preco.toFixed(2)}</span>
+                            
+                            <div class="variation-row ${isUp ? 'up' : 'down'}">
+                                <span>${isUp ? '▲' : '▼'}${asset.regularMarketChangePercent.toFixed(1)}%</span>
+                                <span style="opacity:0.3">|</span>
+                                <span>R$${Math.abs(asset.regularMarketChange).toFixed(2)}</span>
+                            </div>
+
+                            <button class="btn-details" onclick="toggleDetails('${ticker}')">DETALHES</button>
+                            
+                            <div class="extra-info">
+                                <div class="yield-chart-mini">
+                                    <div class="bar" style="height:30%"></div>
+                                    <div class="bar" style="height:50%"></div>
+                                    <div class="bar" style="height:40%"></div>
+                                    <div class="bar" style="height:80%; opacity:1; background:var(--success)"></div>
+                                </div>
+                                <div class="info-line"><span class="info-label">TETO BARSI:</span><span class="info-value">R$ ${teto?teto.toFixed(2):'--'}</span></div>
+                                <div class="info-line"><span class="info-label">GRAHAM:</span><span class="info-value" style="color:var(--accent)">R$ ${graham?graham.toFixed(2):'--'}</span></div>
+                                <div class="info-line"><span class="info-label">DY ATUAL:</span><span class="info-value" style="color:var(--success)">${asset.dividendYield?asset.dividendYield.toFixed(2):'0.0'}%</span></div>
+                            </div>
+                        </div>`;
+                } catch (e) {}
+            }
+        }
+        updateSentiment(totalVar / count);
+    }
+
+    function toggleDetails(ticker) { document.getElementById(`card-${ticker}`).classList.toggle('show-details'); }
+    function toggleSector(id) { document.getElementById(`grid-${id}`).parentElement.classList.toggle('expanded'); }
+    function toggleAll(exp) { document.querySelectorAll('.sector-section').forEach(s => exp ? s.classList.add('expanded') : s.classList.remove('expanded')); }
+    
+    function updateSentiment(avg) {
+        const score = Math.max(5, Math.min(95, 50 + (avg * 15)));
+        document.getElementById('sentimentBar').style.width = `${score}%`;
+        const text = document.getElementById('sentimentText');
+        if (score < 40) text.innerText = "SENTIMENTO: MEDO (OPORTUNIDADE)";
+        else if (score > 60) text.innerText = "SENTIMENTO: GANÂNCIA (CUIDADO)";
+        else text.innerText = "SENTIMENTO: NEUTRO";
+    }
+
+    function updateClock() {
+        const now = new Date();
+        const isOpen = (now.getDay() >= 1 && now.getDay() <= 5) && (now.getHours() >= 10 && now.getHours() < 18);
+        document.getElementById('dot').style.background = isOpen ? '#00f2a1' : '#ff4d6d';
+        document.getElementById('statusText').innerText = `B3 ${isOpen ? 'ABERTO' : 'FECHADO'} | ${now.toLocaleTimeString('pt-BR')}`;
+    }
+
+    applyTheme();
+    renderStocks();
+    setInterval(updateClock, 1000);
+</script>
+</body>
+</html>
