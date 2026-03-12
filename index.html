@@ -51,7 +51,6 @@
         .variation-row { font-size: 0.6rem; font-weight: 700; display: flex; gap: 4px; align-items: center; margin-bottom: 4px; }
         .up { color: var(--success); } .down { color: var(--danger); }
 
-        /* Estrutura Compacta / Detalhes */
         .extra-info { display: none; width: 100%; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
         .card.show-details .extra-info { display: block; }
         .btn-details { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-size: 0.45rem; padding: 2px 6px; border-radius: 4px; cursor: pointer; font-weight: 700; margin-top: 4px; }
@@ -82,7 +81,7 @@
 
 <div class="container">
     <div class="header">
-        <h1>Painel de Ações e Cripto</h1>
+        <h1>Bússola do Dividendo</h1>
         <p>"Siga o fluxo inteligente do capital..."</p>
     </div>
     <div class="btn-container">
@@ -110,15 +109,16 @@
     
     // Configurações de Preço Teto (Carteira Barsi & Graham)
     const config = { 
-        "BBAS3": 28.00, "ITUB4": 32.00, "BBDC4": 14.50, "BBSE3": 33.00, "CXSE3": 15.50,
+        "BBAS3": 28.00, "ITUB4": 32.00, "BBDC4": 14.50, "BBSE3": 33.00, "CXSE3": 15.50, "SANB11": 29.00,
         "PETR4": 36.00, "ELET3": 48.00, "TAEE11": 34.00, "TRPL4": 23.50, "CPLE6": 9.20,
-        "SBSP3": 75.00, "VALE3": 62.00, "KLBN11": 21.00, "MXRF11": 10.10, "HGLG11": 155.00
+        "SBSP3": 75.00, "CSMG3": 18.00, "SAPR11": 24.50, "VALE3": 62.00, "KLBN11": 21.00, 
+        "MXRF11": 10.10, "HGLG11": 155.00
     };
 
     const sectors = {
-        "Bancos & Seguros": { "BBAS3": "Banco do Brasil", "ITUB4": "Itaú Unibanco", "BBDC4": "Bradesco", "BBSE3": "BB Seguridade", "CXSE3": "Caixa Seg" },
+        "Bancos & Seguros": { "BBAS3": "Banco do Brasil", "ITUB4": "Itaú Unibanco", "BBDC4": "Bradesco", "SANB11": "Santander Brasil", "BBSE3": "BB Seguridade", "CXSE3": "Caixa Seg" },
         "Energia & Elétricas": { "PETR4": "Petrobras", "ELET3": "Eletrobras", "TAEE11": "Taesa", "TRPL4": "ISA CTEEP", "CPLE6": "Copel" },
-        "Saneamento & Infra": { "SBSP3": "Sabesp", "CSMG3": "Copasa", "VIVT3": "Vivo", "TIMS3": "TIM Brasil" },
+        "Saneamento & Infra": { "SBSP3": "Sabesp", "CSMG3": "Copasa", "SAPR11": "Sanepar", "VIVT3": "Vivo", "TIMS3": "TIM Brasil" },
         "Commodities & Indústria": { "VALE3": "Vale S.A.", "KLBN11": "Klabin", "WEGE3": "WEG S.A.", "CSNA3": "Siderúrgica Nac" },
         "FIIs & Imobiliário": { "MXRF11": "Maxi Renda", "HGLG11": "CSHG Log", "XPLG11": "XP Log", "KNIP11": "Kinea Índices" },
         "Varejo & Consumo": { "ABEV3": "Ambev", "MGLU3": "Magalu", "RENT3": "Localiza" }
