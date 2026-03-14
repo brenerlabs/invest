@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bússola do Dividendo</title>
+    <title>Equity & Dividend Analytics</title>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,63 +11,66 @@
             --text-muted: #a0a7b1; --border: #2b3139; --success: #00f2a1; --danger: #ff4d6d; --warning: #ffb800;
             --accent: #3b82f6;
         }
-
         [data-theme="light"] {
-            --bg: #f0f2f5; --card-bg: #ffffff; --text-main: #1e2329;
+            --bg: #f4f7f9; --card-bg: #ffffff; --text-main: #1e2329;
             --text-muted: #5e6673; --border: #dcdfe4; --success: #03a66d; --danger: #cf304a; --warning: #f0b90b;
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text-main); padding-bottom: 110px; transition: background 0.3s; }
+        body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text-main); padding-bottom: 110px; transition: all 0.3s ease; }
         
         .ticker-header-group { position: sticky; top: 0; z-index: 1000; background: var(--bg); width: 100%; height: 50px; border-bottom: 1px solid var(--border); }
         .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 10px; }
         
-        .header { text-align: center; margin: 15px 0; }
-        .header h1 { font-size: 1.2rem; font-weight: 900; color: var(--accent); letter-spacing: -0.5px; text-transform: uppercase; }
-        .header p { font-size: 0.6rem; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+        .header { text-align: center; margin: 25px 0; }
+        .header h1 { font-size: 1.4rem; font-weight: 900; color: var(--accent); letter-spacing: -0.5px; text-transform: uppercase; }
+        .header p { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
         
-        .btn-container { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; }
-        .btn { flex: 1; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border); padding: 8px; border-radius: 6px; font-size: 0.6rem; font-weight: 800; cursor: pointer; }
+        .btn-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
+        .btn { flex: 1; max-width: 200px; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 8px; font-size: 0.6rem; font-weight: 800; cursor: pointer; transition: 0.2s; }
+        .btn:hover { border-color: var(--accent); }
 
-        .sector-section { margin-bottom: 8px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
-        .sector-header { padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .sector-title { font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
+        .sector-section { margin-bottom: 10px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+        .sector-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: rgba(0,0,0,0.05); }
+        .sector-title { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
 
-        .grid { display: none; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; padding: 8px; background: var(--bg); }
+        /* Grid inicia oculto para o F5 vir recolhido */
+        .grid { display: none; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; padding: 12px; background: var(--bg); }
         .expanded .grid { display: grid; }
+        .sector-header .arrow { transition: transform 0.3s; font-size: 0.8rem; }
+        .expanded .sector-header .arrow { transform: rotate(180deg); }
 
-        .card { background: var(--card-bg); padding: 12px 8px; border-radius: 8px; border: 1px solid var(--border); text-align: center; display: flex; flex-direction: column; align-items: center; position: relative; transition: 0.3s; }
-        .card.opportunity { animation: pulse-border 2s infinite; }
-        @keyframes pulse-border { 0%, 100% { border-color: var(--success); } 50% { border-color: var(--warning); } }
+        .card { background: var(--card-bg); padding: 15px 10px; border-radius: 10px; border: 1px solid var(--border); text-align: center; position: relative; transition: 0.3s; }
+        .opp-div { animation: pulse-div 2s infinite; border-width: 2px; }
+        .opp-val { animation: pulse-val 2s infinite; border-width: 2px; }
 
-        .buy-label { font-size: 0.45rem; font-weight: 800; color: var(--success); margin-bottom: 4px; animation: blink 1s infinite; }
+        @keyframes pulse-div { 0%, 100% { border-color: var(--warning); box-shadow: 0 0 5px var(--warning); } 50% { border-color: var(--success); } }
+        @keyframes pulse-val { 0%, 100% { border-color: var(--accent); box-shadow: 0 0 5px var(--accent); } 50% { border-color: #fff; } }
+
+        .buy-label { font-size: 0.45rem; font-weight: 800; margin-bottom: 6px; display: block; animation: blink 1s infinite; }
         @keyframes blink { 50% { opacity: 0.2; } }
         
-        .ticker-link { font-size: 0.85rem; font-weight: 800; color: var(--accent); text-decoration: none; margin-bottom: 1px; }
-        .asset-name { font-size: 0.5rem; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
-        .price { font-size: 1.1rem; font-weight: 800; margin-bottom: 2px; }
+        .ticker-link { font-size: 0.9rem; font-weight: 800; color: var(--accent); text-decoration: none; display: block; }
+        .asset-name { font-size: 0.55rem; color: var(--text-muted); font-weight: 600; display: block; margin: 4px 0 8px 0; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .price { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; display: block; }
         
-        .variation-row { font-size: 0.6rem; font-weight: 700; display: flex; gap: 4px; align-items: center; margin-bottom: 4px; }
+        .variation-row { font-size: 0.65rem; font-weight: 700; display: flex; gap: 5px; align-items: center; justify-content: center; margin-bottom: 10px; }
         .up { color: var(--success); } .down { color: var(--danger); }
 
-        .extra-info { display: none; width: 100%; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
-        .card.show-details .extra-info { display: block; }
-        .btn-details { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-size: 0.45rem; padding: 2px 6px; border-radius: 4px; cursor: pointer; font-weight: 700; margin-top: 4px; }
+        .info-box { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
+        .info-line { display: flex; justify-content: space-between; margin-bottom: 4px; }
+        .info-label { font-size: 0.45rem; color: var(--text-muted); font-weight: 700; }
+        .info-value { font-size: 0.6rem; font-weight: 800; }
 
-        .yield-chart-mini { width: 100%; height: 18px; margin-bottom: 8px; display: flex; align-items: flex-end; gap: 2px; justify-content: center; }
-        .bar { width: 3px; background: var(--accent); border-radius: 1px; opacity: 0.4; }
-        .datacom-badge { position: absolute; top: 4px; right: 4px; font-size: 0.65rem; }
+        .market-footer { position: fixed; bottom: 0; left: 0; right: 0; height: 95px; background: var(--card-bg); border-top: 2px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; box-shadow: 0 -5px 15px rgba(0,0,0,0.2); }
+        .sentiment-container { width: 80%; max-width: 300px; height: 8px; background: #333; border-radius: 10px; margin: 8px 0; overflow: hidden; }
+        .sentiment-bar { height: 100%; width: 50%; background: linear-gradient(90deg, var(--danger), var(--warning), var(--success)); transition: width 1s ease-in-out; }
 
-        .info-line { display: flex; justify-content: space-between; width: 100%; margin-bottom: 2px; }
-        .info-label { font-size: 0.42rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; }
-        .info-value { font-size: 0.6rem; font-weight: 800; color: var(--warning); }
-
-        .market-footer { position: fixed; bottom: 0; left: 0; right: 0; height: 95px; background: var(--card-bg); border-top: 2px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; }
-        .sentiment-container { width: 80%; max-width: 300px; height: 10px; background: #333; border-radius: 10px; margin: 6px 0; overflow: hidden; }
-        .sentiment-bar { height: 100%; width: 50%; background: linear-gradient(90deg, var(--danger), var(--warning), var(--success)); transition: width 1s; }
-
-        @media (max-width: 600px) { .grid { grid-template-columns: 1fr 1fr !important; } }
+        @media (max-width: 600px) { 
+            .grid { grid-template-columns: 1fr 1fr !important; gap: 8px; padding: 8px; }
+            .header h1 { font-size: 1.1rem; }
+            .sector-header { padding: 12px 15px; }
+            .btn { font-size: 0.55rem; padding: 8px; }
+        }
     </style>
 </head>
 <body id="mainBody">
@@ -81,148 +84,156 @@
 
 <div class="container">
     <div class="header">
-        <h1>Bússola do Dividendo</h1>
-        <p>"Siga o fluxo inteligente do capital..."</p>
+        <h1>Equity & Dividend Analytics</h1>
+        <p>Monitoramento Estratégico de Ativos e Geração de Renda</p>
     </div>
+    
     <div class="btn-container">
         <button class="btn" onclick="toggleAll(true)">EXPANDIR TUDO</button>
         <button class="btn" onclick="toggleAll(false)">RECOLHER TUDO</button>
     </div>
+
     <div id="dashboard-content"></div>
 </div>
 
 <div class="market-footer">
-    <div style="display: flex; gap: 10px; margin-bottom: 2px;">
+    <div style="display: flex; gap: 15px; margin-bottom: 4px;">
         <a href="https://g1.globo.com/economia/" target="_blank" style="color:var(--text-muted); text-decoration:none; font-size:0.55rem; font-weight:700;">► G1 ECONOMIA</a>
         <a href="https://br.investing.com/" target="_blank" style="color:var(--text-muted); text-decoration:none; font-size:0.55rem; font-weight:700;">► INVESTING</a>
     </div>
-    <div id="sentimentText" style="font-size: 0.5rem; font-weight: 800; text-transform: uppercase;">SENTIMENTO: NEUTRO</div>
+    <div id="sentimentText" style="font-size: 0.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">SENTIMENTO: ANALISANDO...</div>
     <div class="sentiment-container"><div id="sentimentBar" class="sentiment-bar"></div></div>
-    <div style="display: flex; gap: 6px; align-items: center;">
-        <div id="dot" style="width: 8px; height: 8px; border-radius: 50%;"></div>
-        <span id="statusText" style="font-size: 0.6rem; font-weight: 800;">CARREGANDO...</span>
+    <div style="display: flex; gap: 8px; align-items: center;">
+        <div id="dot" style="width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.2);"></div>
+        <span id="statusText" style="font-size: 0.65rem; font-weight: 800; letter-spacing: 0.5px;">CARREGANDO...</span>
     </div>
 </div>
 
 <script>
     const API_TOKEN = 'nctccHqqPkRvTdxGsZeK2f';
     
-    // Configurações de Preço Teto atualizadas com os novos ativos
     const config = { 
-        "BBAS3": 28.00, "ITUB4": 32.00, "BBDC4": 14.50, "BBSE3": 33.00, "CXSE3": 15.50, "SANB11": 29.00,
-        "PETR4": 36.00, "ELET3": 48.00, "TAEE11": 34.00, "TRPL4": 23.50, "CPLE6": 9.20,
-        "SBSP3": 75.00, "CSMG3": 18.00, "SAPR11": 24.50, "VALE3": 62.00, "KLBN11": 21.00, 
-        "MXRF11": 10.10, "HGLG11": 155.00, "BTHF11": 10.00,
-        "BRIV4": 11.50, "PCIP11": 95.00, "HYPE3": 35.00, "BRAP4": 24.50, "INBR32": 42.00,
-        "RBRR11": 92.00, "ALZR11": 118.00, "RBRP11": 65.00, "VRTA11": 94.00
+        "BBAS3": [31.00, 28.00], "ITUB4": [38.00, 32.50], "BBDC4": [18.50, 15.00], "SANB11": [32.00, 29.00], "BRIV4": [12.50, 10.80], "INBR32": [52.00, 15.00], "BBSE3": [36.00, 32.00], "CXSE3": [17.00, 14.50],
+        "PETR4": [42.00, 36.50], "ELET3": [55.00, 48.00], "TAEE11": [37.00, 34.20], "TRPL4": [26.50, 23.80], "CPLE6": [11.00, 9.50],
+        "SBSP3": [85.00, 72.00], "CSMG3": [22.00, 19.50], "SAPR11": [27.00, 24.00], "VIVT3": [48.00, 44.00], "TIMS3": [21.00, 18.50], "HYPE3": [40.00, 32.00],
+        "VALE3": [78.00, 62.00], "BRAP4": [26.00, 21.50], "KLBN11": [24.50, 21.00], "WEGE3": [54.00, 25.00], "CSNA3": [8.50, 7.20],
+        "MXRF11": [10.50, 10.00], "HGLG11": [165.00, 150.00], "BTHF11": [10.50, 9.80], "RBRR11": [98.00, 92.00], "ALZR11": [122.00, 112.00], "RBRP11": [72.00, 62.00], "VRTA11": [98.00, 91.00], "PCIP11": [96.00, 89.50], "XPLG11": [110.00, 102.00], "KNIP11": [100.00, 94.00],
+        "ABEV3": [16.50, 13.50], "MGLU3": [12.00, 8.00], "RENT3": [52.00, 44.00]
     };
 
     const sectors = {
-        "Bancos & Seguros": { "BBAS3": "Banco do Brasil", "ITUB4": "Itaú Unibanco", "BBDC4": "Bradesco", "SANB11": "Santander Brasil", "BRIV4": "Banrisul", "INBR32": "Banco Inter", "BBSE3": "BB Seguridade", "CXSE3": "Caixa Seg" },
+        "Bancos & Seguros": { "BBAS3": "Banco do Brasil", "ITUB4": "Itaú Unibanco", "BBDC4": "Bradesco", "SANB11": "Santander Brasil", "BRIV4": "Banrisul", "INBR32": "Banco Inter", "BBSE3": "BB Seguridade", "CXSE3": "Caixa Seguridade" },
         "Energia & Elétricas": { "PETR4": "Petrobras", "ELET3": "Eletrobras", "TAEE11": "Taesa", "TRPL4": "ISA CTEEP", "CPLE6": "Copel" },
-        "Saneamento & Infra": { "SBSP3": "Sabesp", "CSMG3": "Copasa", "SAPR11": "Sanepar", "VIVT3": "Vivo", "TIMS3": "TIM Brasil", "HYPE3": "Hypera Pharma" },
-        "Commodities & Indústria": { "VALE3": "Vale S.A.", "BRAP4": "Bradespar", "KLBN11": "Klabin", "WEGE3": "WEG S.A.", "CSNA3": "Siderúrgica Nac" },
-        "FIIs & Imobiliário": { "MXRF11": "Maxi Renda", "HGLG11": "CSHG Log", "XPLG11": "XP Log", "KNIP11": "Kinea Índices", "BTHF11": "BTG Hedge Fund", "PCIP11": "Pátria Crédito", "RBRR11": "RBR Rendimento", "ALZR11": "Alianza Trust", "RBRP11": "RBR Properties", "VRTA11": "Fator Veritá" },
+        "Saúde & Infra": { "SBSP3": "Sabesp", "CSMG3": "Copasa", "SAPR11": "Sanepar", "VIVT3": "Vivo", "TIMS3": "TIM Brasil", "HYPE3": "Hypera Pharma" },
+        "Commodities & Indústria": { "VALE3": "Vale S.A.", "BRAP4": "Bradespar", "KLBN11": "Klabin", "WEGE3": "WEG S.A.", "CSNA3": "Siderúrgica Nacional" },
+        "FIIs & Imobiliário": { "MXRF11": "Maxi Renda", "HGLG11": "CSHG Log", "BTHF11": "BTG Hedge", "RBRR11": "RBR Rendimento", "ALZR11": "Alianza Trust", "RBRP11": "RBR Properties", "VRTA11": "Fator Veritá", "PCIP11": "Pátria Crédito", "XPLG11": "XP Log", "KNIP11": "Kinea Índices" },
         "Varejo & Consumo": { "ABEV3": "Ambev", "MGLU3": "Magalu", "RENT3": "Localiza" }
     };
 
     function applyTheme() {
         const hour = new Date().getHours();
-        const isDay = (hour >= 6 && hour < 18);
-        if (isDay) document.getElementById('mainBody').setAttribute('data-theme', 'light');
-        else document.getElementById('mainBody').removeAttribute('data-theme');
+        // Tema Claro das 06h às 18h, fora disso Escuro
+        if (hour >= 6 && hour < 18) {
+            document.body.setAttribute('data-theme', 'light');
+        } else {
+            document.body.removeAttribute('data-theme');
+        }
     }
 
-    function calcGraham(vpa, lpa) { return (vpa > 0 && lpa > 0) ? Math.sqrt(22.5 * vpa * lpa) : null; }
-
-    async function renderStocks() {
+    async function render() {
         const container = document.getElementById('dashboard-content');
         container.innerHTML = "";
         let totalVar = 0, count = 0;
 
         for (const [name, list] of Object.entries(sectors)) {
             const id = name.replace(/\s/g, '').replace('&', '');
-            const sectorDiv = document.createElement('div');
-            sectorDiv.className = 'sector-section';
             const size = Object.keys(list).length;
-            sectorDiv.innerHTML = `
-                <div class="sector-header" onclick="toggleSector('${id}')">
-                    <span class="sector-title">${name} (${size})</span>
-                    <span>▼</span>
-                </div>
-                <div class="grid" id="grid-${id}"></div>`;
-            container.appendChild(sectorDiv);
             
-            const grid = document.getElementById(`grid-${id}`);
+            // Inicia sem a classe 'expanded' para o F5 vir fechado
+            container.innerHTML += `
+                <div class="sector-section" id="sec-${id}">
+                    <div class="sector-header" onclick="toggleSector('${id}')">
+                        <span class="sector-title">${name} (${size})</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="grid" id="${id}"></div>
+                </div>`;
+            
+            const grid = document.getElementById(id);
             for (const ticker in list) {
                 try {
-                    const res = await fetch(`https://brapi.dev/api/quote/${ticker}?token=${API_TOKEN}&fundamental=true`);
+                    const res = await fetch(`https://brapi.dev/api/quote/${ticker}?token=${API_TOKEN}`);
                     const data = await res.json();
                     const asset = data.results[0];
-                    const teto = config[ticker] || 0;
                     const preco = asset.regularMarketPrice;
-                    const isOpp = teto > 0 && preco <= teto;
-                    const isUp = asset.regularMarketChangePercent >= 0;
-                    const graham = calcGraham(asset.bookValue, asset.earningsPerShare);
+                    const valAlvo = config[ticker][0];
+                    const divTeto = config[ticker][1];
                     
+                    const isDivOpp = preco <= divTeto;
+                    const isValOpp = preco <= valAlvo && !isDivOpp;
+                    const isUp = asset.regularMarketChangePercent >= 0;
+
                     totalVar += asset.regularMarketChangePercent; count++;
 
                     grid.innerHTML += `
-                        <div class="card ${isOpp ? 'opportunity' : ''}" id="card-${ticker}">
-                            ${isOpp ? `<span class="buy-label">COMPRA! ${((preco-teto)/teto*100).toFixed(1)}%</span>` : ''}
-                            ${asset.dividendYield > 8 ? '<span class="datacom-badge">💰</span>' : ''}
+                        <div class="card ${isDivOpp ? 'opp-div' : (isValOpp ? 'opp-val' : '')}">
+                            <span class="buy-label" style="color: ${isDivOpp ? 'var(--warning)' : (isValOpp ? 'var(--accent)' : 'transparent')}">
+                                ${isDivOpp ? '🛒 OPORTUNIDADE DIVIDENDOS' : (isValOpp ? '🚀 FOCO EM VALORIZAÇÃO' : '&nbsp;')}
+                            </span>
                             <a href="https://www.google.com/finance/quote/${ticker}:BVMF" target="_blank" class="ticker-link">${ticker}</a>
                             <span class="asset-name">${list[ticker]}</span>
                             <span class="price">R$ ${preco.toFixed(2)}</span>
-                            
                             <div class="variation-row ${isUp ? 'up' : 'down'}">
                                 <span>${isUp ? '▲' : '▼'}${asset.regularMarketChangePercent.toFixed(1)}%</span>
                                 <span style="opacity:0.3">|</span>
-                                <span>R$${Math.abs(asset.regularMarketChange).toFixed(2)}</span>
+                                <span>R$ ${Math.abs(asset.regularMarketChange).toFixed(2)}</span>
                             </div>
-
-                            <button class="btn-details" onclick="toggleDetails('${ticker}')">DETALHES</button>
-                            
-                            <div class="extra-info">
-                                <div class="yield-chart-mini">
-                                    <div class="bar" style="height:30%"></div>
-                                    <div class="bar" style="height:50%"></div>
-                                    <div class="bar" style="height:40%"></div>
-                                    <div class="bar" style="height:80%; opacity:1; background:var(--success)"></div>
-                                </div>
-                                <div class="info-line"><span class="info-label">TETO BARSI:</span><span class="info-value">R$ ${teto?teto.toFixed(2):'--'}</span></div>
-                                <div class="info-line"><span class="info-label">GRAHAM:</span><span class="info-value" style="color:var(--accent)">R$ ${graham?graham.toFixed(2):'--'}</span></div>
-                                <div class="info-line"><span class="info-label">DY ATUAL:</span><span class="info-value" style="color:var(--success)">${asset.dividendYield?asset.dividendYield.toFixed(2):'0.0'}%</span></div>
+                            <div class="info-box">
+                                <div class="info-line"><span class="info-label">TARGET VALORIZAÇÃO:</span><span class="info-value" style="color:var(--accent)">R$ ${valAlvo.toFixed(2)}</span></div>
+                                <div class="info-line"><span class="info-label">PREÇO TETO DIV:</span><span class="info-value" style="color:var(--warning)">R$ ${divTeto.toFixed(2)}</span></div>
                             </div>
                         </div>`;
-                } catch (e) {}
+                } catch(e) {}
             }
         }
         updateSentiment(totalVar / count);
     }
 
-    function toggleDetails(ticker) { document.getElementById(`card-${ticker}`).classList.toggle('show-details'); }
-    function toggleSector(id) { document.getElementById(`grid-${id}`).parentElement.classList.toggle('expanded'); }
-    function toggleAll(exp) { document.querySelectorAll('.sector-section').forEach(s => exp ? s.classList.add('expanded') : s.classList.remove('expanded')); }
-    
+    function toggleSector(id) {
+        const sec = document.getElementById('sec-' + id);
+        const grid = document.getElementById(id);
+        const isHidden = grid.style.display === 'none' || grid.style.display === '';
+        
+        grid.style.display = isHidden ? 'grid' : 'none';
+        isHidden ? sec.classList.add('expanded') : sec.classList.remove('expanded');
+    }
+
+    function toggleAll(exp) {
+        document.querySelectorAll('.sector-section').forEach(sec => {
+            const grid = sec.querySelector('.grid');
+            grid.style.display = exp ? 'grid' : 'none';
+            exp ? sec.classList.add('expanded') : sec.classList.remove('expanded');
+        });
+    }
+
     function updateSentiment(avg) {
         const score = Math.max(5, Math.min(95, 50 + (avg * 15)));
         document.getElementById('sentimentBar').style.width = `${score}%`;
         const text = document.getElementById('sentimentText');
-        if (score < 40) text.innerText = "SENTIMENTO: MEDO (OPORTUNIDADE)";
-        else if (score > 60) text.innerText = "SENTIMENTO: GANÂNCIA (CUIDADO)";
-        else text.innerText = "SENTIMENTO: NEUTRO";
+        if (score < 40) text.innerText = "SENTIMENTO: MEDO (HORA DE COMPRAR)";
+        else if (score > 60) text.innerText = "SENTIMENTO: GANÂNCIA (HORA DE CAUTELA)";
+        else text.innerText = "SENTIMENTO: MERCADO NEUTRO";
     }
 
     function updateClock() {
         const now = new Date();
         const isOpen = (now.getDay() >= 1 && now.getDay() <= 5) && (now.getHours() >= 10 && now.getHours() < 18);
         document.getElementById('dot').style.background = isOpen ? '#00f2a1' : '#ff4d6d';
-        document.getElementById('statusText').innerText = `B3 ${isOpen ? 'ABERTO' : 'FECHADO'} | ${now.toLocaleTimeString('pt-BR')}`;
+        document.getElementById('statusText').innerText = `BOLSA ${isOpen ? 'ABERTA' : 'FECHADA'} | ${now.toLocaleTimeString('pt-BR')}`;
     }
 
     applyTheme();
-    renderStocks();
+    render();
     setInterval(updateClock, 1000);
 </script>
 </body>
