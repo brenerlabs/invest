@@ -9,189 +9,196 @@
         :root {
             --bg: #0b0e11; --card-bg: #161a1e; --text-main: #e3e6e8;
             --text-muted: #a0a7b1; --border: #2b3139; --success: #00f2a1; --danger: #ff4d6d; --warning: #ffb800;
-            --accent: #3b82f6;
+            --accent: #3b82f6; --double: #a855f7;
         }
-        [data-theme="light"] {
+        body.light-theme {
             --bg: #f4f7f9; --card-bg: #ffffff; --text-main: #1e2329;
             --text-muted: #5e6673; --border: #dcdfe4; --success: #03a66d; --danger: #cf304a; --warning: #f0b90b;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text-main); padding-bottom: 110px; transition: all 0.3s ease; }
+        body { font-family: 'Sora', sans-serif; background: var(--bg); color: var(--text-main); padding-bottom: 120px; transition: background 0.5s ease; }
         
-        .ticker-header-group { position: sticky; top: 0; z-index: 1000; background: var(--bg); width: 100%; height: 50px; border-bottom: 1px solid var(--border); }
+        .ticker-header-group { position: sticky; top: 0; z-index: 1001; background: var(--bg); width: 100%; border-bottom: 1px solid var(--border); }
         .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 10px; }
-        
-        .header { text-align: center; margin: 25px 0; }
-        .header h1 { font-size: 1.4rem; font-weight: 900; color: var(--accent); letter-spacing: -0.5px; text-transform: uppercase; }
-        .header p { font-size: 0.65rem; color: var(--text-muted); font-weight: 600; margin-top: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .btn-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
-        .btn { flex: 1; max-width: 200px; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 8px; font-size: 0.6rem; font-weight: 800; cursor: pointer; transition: 0.2s; }
-        .btn:hover { border-color: var(--accent); }
+        .header { text-align: center; margin: 20px 0; }
+        .header h1 { font-size: 1.3rem; font-weight: 900; color: var(--accent); text-transform: uppercase; }
 
+        /* Resumos de Estratégia no Cabeçalho */
+        .legend-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 25px; }
+        .legend-box { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border); border-left: 5px solid var(--border); }
+        .legend-box h3 { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
+        .legend-box p { font-size: 0.55rem; color: var(--text-muted); line-height: 1.4; }
+
+        /* Controles e Filtros */
+        .controls-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; align-items: center; }
+        .filter-group { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+        .filter-btn { background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border); padding: 8px 15px; border-radius: 20px; font-size: 0.55rem; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .filter-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(59, 130, 246, 0.1); }
+        
+        .btn-container { display: flex; gap: 8px; width: 100%; max-width: 400px; }
+        .btn { flex: 1; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 8px; font-size: 0.6rem; font-weight: 800; cursor: pointer; }
+
+        /* Setores */
         .sector-section { margin-bottom: 10px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-        .sector-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; background: rgba(0,0,0,0.05); }
+        .sector-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .sector-title { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
-
-        /* Grid inicia oculto para o F5 vir recolhido */
+        .arrow { transition: transform 0.3s; font-size: 0.7rem; }
+        .expanded .arrow { transform: rotate(180deg); }
+        
         .grid { display: none; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; padding: 12px; background: var(--bg); }
         .expanded .grid { display: grid; }
-        .sector-header .arrow { transition: transform 0.3s; font-size: 0.8rem; }
-        .expanded .sector-header .arrow { transform: rotate(180deg); }
 
-        .card { background: var(--card-bg); padding: 15px 10px; border-radius: 10px; border: 1px solid var(--border); text-align: center; position: relative; transition: 0.3s; }
-        .opp-div { animation: pulse-div 2s infinite; border-width: 2px; }
-        .opp-val { animation: pulse-val 2s infinite; border-width: 2px; }
+        /* Cards */
+        .card { background: var(--card-bg); padding: 15px 10px; border-radius: 10px; border: 1px solid var(--border); text-align: center; }
+        .opp-div { border: 2px solid var(--warning); }
+        .opp-val { border: 2px solid var(--accent); }
+        .opp-double { border: 2px solid var(--double); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { border-color: var(--double); } 50% { border-color: #fff; } }
 
-        @keyframes pulse-div { 0%, 100% { border-color: var(--warning); box-shadow: 0 0 5px var(--warning); } 50% { border-color: var(--success); } }
-        @keyframes pulse-val { 0%, 100% { border-color: var(--accent); box-shadow: 0 0 5px var(--accent); } 50% { border-color: #fff; } }
-
-        .buy-label { font-size: 0.45rem; font-weight: 800; margin-bottom: 6px; display: block; animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0.2; } }
+        .buy-label { font-size: 0.4rem; font-weight: 800; margin-bottom: 6px; display: block; text-transform: uppercase; min-height: 10px; }
+        .ticker-link { font-size: 0.9rem; font-weight: 800; color: var(--accent); text-decoration: none; }
+        .asset-name { font-size: 0.5rem; color: var(--text-muted); display: block; margin: 3px 0 8px 0; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .price { font-size: 1.1rem; font-weight: 800; display: block; margin-bottom: 4px; }
         
-        .ticker-link { font-size: 0.9rem; font-weight: 800; color: var(--accent); text-decoration: none; display: block; }
-        .asset-name { font-size: 0.55rem; color: var(--text-muted); font-weight: 600; display: block; margin: 4px 0 8px 0; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .price { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; display: block; }
-        
-        .variation-row { font-size: 0.65rem; font-weight: 700; display: flex; gap: 5px; align-items: center; justify-content: center; margin-bottom: 10px; }
+        .variation-row { font-size: 0.6rem; font-weight: 700; display: flex; gap: 4px; justify-content: center; margin-bottom: 10px; }
         .up { color: var(--success); } .down { color: var(--danger); }
 
         .info-box { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); }
-        .info-line { display: flex; justify-content: space-between; margin-bottom: 4px; }
-        .info-label { font-size: 0.45rem; color: var(--text-muted); font-weight: 700; }
-        .info-value { font-size: 0.6rem; font-weight: 800; }
+        .info-line { display: flex; justify-content: space-between; margin-bottom: 3px; font-size: 0.55rem; font-weight: 800; }
+        .info-label { color: var(--text-muted); font-size: 0.45rem; }
 
-        .market-footer { position: fixed; bottom: 0; left: 0; right: 0; height: 95px; background: var(--card-bg); border-top: 2px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; box-shadow: 0 -5px 15px rgba(0,0,0,0.2); }
-        .sentiment-container { width: 80%; max-width: 300px; height: 8px; background: #333; border-radius: 10px; margin: 8px 0; overflow: hidden; }
-        .sentiment-bar { height: 100%; width: 50%; background: linear-gradient(90deg, var(--danger), var(--warning), var(--success)); transition: width 1s ease-in-out; }
+        /* Rodapé */
+        .market-footer { position: fixed; bottom: 0; width: 100%; height: 100px; background: var(--card-bg); border-top: 2px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
+        .sentiment-container { width: 200px; height: 6px; background: #333; border-radius: 10px; margin: 8px 0; overflow: hidden; }
+        .sentiment-bar { height: 100%; width: 50%; background: linear-gradient(90deg, var(--danger), var(--warning), var(--success)); transition: 1s; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 5px; }
 
-        @media (max-width: 600px) { 
-            .grid { grid-template-columns: 1fr 1fr !important; gap: 8px; padding: 8px; }
-            .header h1 { font-size: 1.1rem; }
-            .sector-header { padding: 12px 15px; }
-            .btn { font-size: 0.55rem; padding: 8px; }
-        }
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr 1fr !important; } }
     </style>
 </head>
-<body id="mainBody">
+<body>
 
 <div class="ticker-header-group">
-    <div class="tradingview-widget-container"><div class="tradingview-widget-container__widget"></div>
-    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-    {"symbols": [{"proName": "BMFBOVESPA:IBOV", "title": "IBOV"},{"proName": "FX_IDC:USDBRL", "title": "USD/BRL"},{"proName": "BINANCE:BTCBRL", "title": "BTC"}],"showSymbolLogo": true, "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "br"}
-    </script></div>
+    <div class="tradingview-widget-container">
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+        {"symbols": [{"proName": "FX_IDC:USDBRL", "title": "USD/BRL"},{"proName": "BMFBOVESPA:IBOV", "title": "IBOVESPA"},{"proName": "BINANCE:BTCBRL", "title": "BITCOIN/BRL"}], "colorTheme": "dark", "isTransparent": true, "displayMode": "adaptive", "locale": "br"}
+        </script>
+    </div>
 </div>
 
 <div class="container">
-    <div class="header">
-        <h1>Equity & Dividend Analytics</h1>
-        <p>Monitoramento Estratégico de Ativos e Geração de Renda</p>
+    <div class="header"><h1>Equity & Dividend Analytics</h1></div>
+
+    <div class="legend-container">
+        <div class="legend-box" style="border-left-color: var(--warning);">
+            <h3 style="color: var(--warning);">🛒 Dividendos</h3>
+            <p>Foco em <b>Renda Passiva</b>. Ativos abaixo do Preço Teto para garantir um Yield mínimo. Ideal para fluxo de caixa constante.</p>
+        </div>
+        <div class="legend-box" style="border-left-color: var(--accent);">
+            <h3 style="color: var(--accent);">🚀 Valorização</h3>
+            <p>Foco em <b>Ganho de Capital</b>. Ativos abaixo do Preço Alvo projetado. Ideal para acumular patrimônio pelo crescimento da cotação.</p>
+        </div>
+        <div class="legend-box" style="border-left-color: var(--double);">
+            <h3 style="color: var(--double);">💎 Oportunidade Dupla</h3>
+            <p>O <b>Cenário Perfeito</b>. O ativo está barato tanto para dividendos quanto para valorização. Margem de segurança máxima.</p>
+        </div>
     </div>
-    
-    <div class="btn-container">
-        <button class="btn" onclick="toggleAll(true)">EXPANDIR TUDO</button>
-        <button class="btn" onclick="toggleAll(false)">RECOLHER TUDO</button>
+
+    <div class="controls-group">
+        <div class="filter-group">
+            <button class="filter-btn active" onclick="applyFilter('all', this)">Todos</button>
+            <button class="filter-btn" onclick="applyFilter('div', this)">Dividendos</button>
+            <button class="filter-btn" onclick="applyFilter('val', this)">Valorização</button>
+            <button class="filter-btn" onclick="applyFilter('double', this)">Dupla</button>
+        </div>
+        <div class="btn-container">
+            <button class="btn" onclick="toggleAll(true)">EXPANDIR TUDO</button>
+            <button class="btn" onclick="toggleAll(false)">RECOLHER TUDO</button>
+        </div>
     </div>
 
     <div id="dashboard-content"></div>
 </div>
 
 <div class="market-footer">
-    <div style="display: flex; gap: 15px; margin-bottom: 4px;">
-        <a href="https://g1.globo.com/economia/" target="_blank" style="color:var(--text-muted); text-decoration:none; font-size:0.55rem; font-weight:700;">► G1 ECONOMIA</a>
-        <a href="https://br.investing.com/" target="_blank" style="color:var(--text-muted); text-decoration:none; font-size:0.55rem; font-weight:700;">► INVESTING</a>
+    <div style="display: flex; gap: 15px; margin-bottom: 5px;">
+        <a href="https://statusinvest.com.br/" target="_blank" style="color:var(--accent); text-decoration:none; font-size:0.55rem; font-weight:800;">STATUS INVEST</a>
     </div>
-    <div id="sentimentText" style="font-size: 0.55rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">SENTIMENTO: ANALISANDO...</div>
-    <div class="sentiment-container"><div id="sentimentBar" class="sentiment-bar"></div></div>
-    <div style="display: flex; gap: 8px; align-items: center;">
-        <div id="dot" style="width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.2);"></div>
-        <span id="statusText" style="font-size: 0.65rem; font-weight: 800; letter-spacing: 0.5px;">CARREGANDO...</span>
+    <div id="sentimentText" style="font-size: 0.5rem; font-weight: 800; text-transform: uppercase;">Sentimento do Mercado</div>
+    <div class="sentiment-container"><div id="sentimentFill" class="sentiment-bar"></div></div>
+    <div style="display: flex; align-items: center; font-size: 0.6rem; font-weight: 800;">
+        <span id="dot" class="status-dot"></span>
+        <span id="statusText">CARREGANDO...</span>
     </div>
 </div>
 
 <script>
     const API_TOKEN = 'nctccHqqPkRvTdxGsZeK2f';
-    
     const config = { 
-        "BBAS3": [31.00, 28.00], "ITUB4": [38.00, 32.50], "BBDC4": [18.50, 15.00], "SANB11": [32.00, 29.00], "BRIV4": [12.50, 10.80], "INBR32": [52.00, 15.00], "BBSE3": [36.00, 32.00], "CXSE3": [17.00, 14.50],
-        "PETR4": [42.00, 36.50], "ELET3": [55.00, 48.00], "TAEE11": [37.00, 34.20], "TRPL4": [26.50, 23.80], "CPLE6": [11.00, 9.50],
-        "SBSP3": [85.00, 72.00], "CSMG3": [22.00, 19.50], "SAPR11": [27.00, 24.00], "VIVT3": [48.00, 44.00], "TIMS3": [21.00, 18.50], "HYPE3": [40.00, 32.00],
-        "VALE3": [78.00, 62.00], "BRAP4": [26.00, 21.50], "KLBN11": [24.50, 21.00], "WEGE3": [54.00, 25.00], "CSNA3": [8.50, 7.20],
-        "MXRF11": [10.50, 10.00], "HGLG11": [165.00, 150.00], "BTHF11": [10.50, 9.80], "RBRR11": [98.00, 92.00], "ALZR11": [122.00, 112.00], "RBRP11": [72.00, 62.00], "VRTA11": [98.00, 91.00], "PCIP11": [96.00, 89.50], "XPLG11": [110.00, 102.00], "KNIP11": [100.00, 94.00],
-        "ABEV3": [16.50, 13.50], "MGLU3": [12.00, 8.00], "RENT3": [52.00, 44.00], "PRIO3": [58.00, 42.00], "LREN3": [22.00, 16.50], "IVVB11": [310.00, 240.00]
+        "BBAS3": [31.0, 28.0], "ITUB4": [38.0, 32.5], "BBDC4": [18.5, 15.0], "SANB11": [32.0, 29.0], "BBSE3": [36.0, 32.0], "CXSE3": [17.0, 14.5],
+        "PETR4": [42.0, 36.5], "ELET3": [55.0, 48.0], "TAEE11": [37.0, 34.2], "TRPL4": [26.5, 23.8], "CPLE6": [11.0, 9.5],
+        "SBSP3": [85.0, 72.0], "CSMG3": [22.0, 19.5], "SAPR11": [27.0, 24.0], "VIVT3": [48.0, 44.0], "HYPE3": [40.0, 32.0],
+        "VALE3": [78.0, 62.0], "PRIO3": [58.0, 42.0], "BRAP4": [26.0, 21.5], "KLBN11": [24.5, 21.0], "WEGE3": [54.0, 25.0], "CSNA3": [18.5, 14.0],
+        "MXRF11": [10.5, 10.0], "HGLG11": [165.0, 150.0], "BTHF11": [10.5, 9.8], "RBRR11": [98.0, 92.0], "ALZR11": [122.0, 112.0], "RBRP11": [72.0, 62.0], "VRTA11": [98.0, 91.0], "PCIP11": [96.0, 89.5], "XPLG11": [110.0, 102.0], "KNIP11": [100.0, 94.0],
+        "ABEV3": [16.5, 13.5], "LREN3": [22.0, 16.5], "MGLU3": [12.0, 8.0], "RENT3": [52.0, 44.0], "IVVB11": [310.0, 240.0]
     };
 
     const sectors = {
-        "Bancos & Seguros": { "BBAS3": "Banco do Brasil", "ITUB4": "Itaú Unibanco", "BBDC4": "Bradesco", "SANB11": "Santander Brasil", "BRIV4": "Banrisul", "INBR32": "Banco Inter", "BBSE3": "BB Seguridade", "CXSE3": "Caixa Seguridade" },
+        "Bancos & Seguros": { "BBAS3": "Banco do Brasil", "ITUB4": "Itaú Unibanco", "BBDC4": "Bradesco", "SANB11": "Santander", "BBSE3": "BB Seguridade", "CXSE3": "Caixa Seguridade" },
         "Energia & Elétricas": { "PETR4": "Petrobras", "ELET3": "Eletrobras", "TAEE11": "Taesa", "TRPL4": "ISA CTEEP", "CPLE6": "Copel" },
-        "Saúde & Infra": { "SBSP3": "Sabesp", "CSMG3": "Copasa", "SAPR11": "Sanepar", "VIVT3": "Vivo", "TIMS3": "TIM Brasil", "HYPE3": "Hypera Pharma" },
-        "Commodities & Indústria": { "VALE3": "Vale S.A.", "PRIO3": "PetroRio (PRIO)", "BRAP4": "Bradespar", "KLBN11": "Klabin", "WEGE3": "WEG S.A.", "CSNA3": "Siderúrgica Nacional" },
-        "FIIs & Imobiliário": { "MXRF11": "Maxi Renda", "HGLG11": "CSHG Log", "BTHF11": "BTG Hedge", "RBRR11": "RBR Rendimento", "ALZR11": "Alianza Trust", "RBRP11": "RBR Properties", "VRTA11": "Fator Veritá", "PCIP11": "Pátria Crédito", "XPLG11": "XP Log", "KNIP11": "Kinea Índices" },
-        "Varejo & Consumo": { "ABEV3": "Ambev", "LREN3": "Lojas Renner","MGLU3": "Magalu", "RENT3": "Localiza" },
-	"Índices & Internacional": {"IVVB11": "S&P 500 (IVVB11)"}
+        "Saúde & Infra": { "SBSP3": "Sabesp", "CSMG3": "Copasa", "SAPR11": "Sanepar", "VIVT3": "Vivo", "HYPE3": "Hypera Pharma" },
+        "Commodities & Indústria": { "VALE3": "Vale S.A.", "PRIO3": "PetroRio", "BRAP4": "Bradespar", "KLBN11": "Klabin", "WEGE3": "WEG S.A.", "CSNA3": "Siderúrgica Nac." },
+        "FIIs & Imobiliário": { "MXRF11": "Maxi Renda", "HGLG11": "CSHG Log", "BTHF11": "BTG Hedge", "RBRR11": "RBR Rend.", "ALZR11": "Alianza Trust", "RBRP11": "RBR Prop.", "VRTA11": "Fator Veritá", "PCIP11": "Pátria Créd.", "XPLG11": "XP Log", "KNIP11": "Kinea Índices" },
+        "Varejo & Consumo": { "ABEV3": "Ambev", "LREN3": "Lojas Renner", "MGLU3": "Magalu", "RENT3": "Localiza" },
+        "Internacional": { "IVVB11": "S&P 500 ETF" }
     };
 
-    function applyTheme() {
+    async function start() {
         const hour = new Date().getHours();
-        // Tema Claro das 06h às 18h, fora disso Escuro
-        if (hour >= 6 && hour < 18) {
-            document.body.setAttribute('data-theme', 'light');
-        } else {
-            document.body.removeAttribute('data-theme');
-        }
-    }
-
-    async function render() {
+        document.body.classList.toggle('light-theme', hour >= 6 && hour < 18);
         const container = document.getElementById('dashboard-content');
-        container.innerHTML = "";
         let totalVar = 0, count = 0;
 
         for (const [name, list] of Object.entries(sectors)) {
-            const id = name.replace(/\s/g, '').replace('&', '');
-            const size = Object.keys(list).length;
-            
-            // Inicia sem a classe 'expanded' para o F5 vir fechado
-            container.innerHTML += `
-                <div class="sector-section" id="sec-${id}">
-                    <div class="sector-header" onclick="toggleSector('${id}')">
-                        <span class="sector-title">${name} (${size})</span>
-                        <span class="arrow">▼</span>
-                    </div>
-                    <div class="grid" id="${id}"></div>
-                </div>`;
-            
-            const grid = document.getElementById(id);
+            const id = name.replace(/\s/g, '');
+            const sec = document.createElement('div');
+            sec.className = 'sector-section';
+            sec.id = `sec-${id}`;
+            sec.innerHTML = `<div class="sector-header" onclick="toggleSector('${id}')"><span class="sector-title">${name} (${Object.keys(list).length})</span><span class="arrow">▼</span></div><div class="grid" id="grid-${id}"></div>`;
+            container.appendChild(sec);
+            const grid = document.getElementById(`grid-${id}`);
+
             for (const ticker in list) {
                 try {
                     const res = await fetch(`https://brapi.dev/api/quote/${ticker}?token=${API_TOKEN}`);
                     const data = await res.json();
                     const asset = data.results[0];
+                    const [alvo, teto] = config[ticker];
                     const preco = asset.regularMarketPrice;
-                    const valAlvo = config[ticker][0];
-                    const divTeto = config[ticker][1];
                     
-                    const isDivOpp = preco <= divTeto;
-                    const isValOpp = preco <= valAlvo && !isDivOpp;
-                    const isUp = asset.regularMarketChangePercent >= 0;
+                    const isDiv = preco <= teto;
+                    const isVal = preco <= alvo;
+                    let type="none", label="", cls="", color="transparent";
+                    if(isDiv && isVal) { type="double"; label="💎 Dupla"; cls="opp-double"; color="var(--double)"; }
+                    else if(isDiv) { type="div"; label="🛒 Dividendos"; cls="opp-div"; color="var(--warning)"; }
+                    else if(isVal) { type="val"; label="🚀 Valorização"; cls="opp-val"; color="var(--accent)"; }
 
                     totalVar += asset.regularMarketChangePercent; count++;
 
                     grid.innerHTML += `
-                        <div class="card ${isDivOpp ? 'opp-div' : (isValOpp ? 'opp-val' : '')}">
-                            <span class="buy-label" style="color: ${isDivOpp ? 'var(--warning)' : (isValOpp ? 'var(--accent)' : 'transparent')}">
-                                ${isDivOpp ? '🛒 OPORTUNIDADE DIVIDENDOS' : (isValOpp ? '🚀 FOCO EM VALORIZAÇÃO' : '&nbsp;')}
-                            </span>
-                            <a href="https://www.google.com/finance/quote/${ticker}:BVMF" target="_blank" class="ticker-link">${ticker}</a>
+                        <div class="card ${cls}" data-type="${type}">
+                            <span class="buy-label" style="color:${color}">${label}</span>
+                            <a href="https://statusinvest.com.br/acoes/${ticker}" target="_blank" class="ticker-link">${ticker}</a>
                             <span class="asset-name">${list[ticker]}</span>
                             <span class="price">R$ ${preco.toFixed(2)}</span>
-                            <div class="variation-row ${isUp ? 'up' : 'down'}">
-                                <span>${isUp ? '▲' : '▼'}${asset.regularMarketChangePercent.toFixed(1)}%</span>
-                                <span style="opacity:0.3">|</span>
+                            <div class="variation-row ${asset.regularMarketChangePercent >= 0 ? 'up' : 'down'}">
+                                <span>${asset.regularMarketChangePercent >= 0 ? '▲':'▼'}${asset.regularMarketChangePercent.toFixed(1)}%</span>
+                                <span style="opacity:0.2">|</span>
                                 <span>R$ ${Math.abs(asset.regularMarketChange).toFixed(2)}</span>
                             </div>
                             <div class="info-box">
-                                <div class="info-line"><span class="info-label">TARGET VALORIZAÇÃO:</span><span class="info-value" style="color:var(--accent)">R$ ${valAlvo.toFixed(2)}</span></div>
-                                <div class="info-line"><span class="info-label">PREÇO TETO DIV:</span><span class="info-value" style="color:var(--warning)">R$ ${divTeto.toFixed(2)}</span></div>
+                                <div class="info-line"><span class="info-label">ALVO:</span><span style="color:var(--accent)">R$ ${alvo.toFixed(2)}</span></div>
+                                <div class="info-line"><span class="info-label">TETO:</span><span style="color:var(--warning)">R$ ${teto.toFixed(2)}</span></div>
                             </div>
                         </div>`;
                 } catch(e) {}
@@ -200,30 +207,25 @@
         updateSentiment(totalVar / count);
     }
 
-    function toggleSector(id) {
-        const sec = document.getElementById('sec-' + id);
-        const grid = document.getElementById(id);
-        const isHidden = grid.style.display === 'none' || grid.style.display === '';
-        
-        grid.style.display = isHidden ? 'grid' : 'none';
-        isHidden ? sec.classList.add('expanded') : sec.classList.remove('expanded');
-    }
-
-    function toggleAll(exp) {
+    function applyFilter(type, btn) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.card').forEach(card => {
+            card.style.display = (type === 'all' || card.dataset.type === type) ? 'block' : 'none';
+        });
         document.querySelectorAll('.sector-section').forEach(sec => {
-            const grid = sec.querySelector('.grid');
-            grid.style.display = exp ? 'grid' : 'none';
-            exp ? sec.classList.add('expanded') : sec.classList.remove('expanded');
+            const hasVisible = Array.from(sec.querySelectorAll('.card')).some(c => c.style.display !== 'none');
+            hasVisible ? sec.classList.add('expanded') : sec.classList.remove('expanded');
         });
     }
 
+    function toggleSector(id) { document.getElementById('sec-' + id).classList.toggle('expanded'); }
+    function toggleAll(exp) { document.querySelectorAll('.sector-section').forEach(sec => exp ? sec.classList.add('expanded') : sec.classList.remove('expanded')); }
+    
     function updateSentiment(avg) {
-        const score = Math.max(5, Math.min(95, 50 + (avg * 15)));
-        document.getElementById('sentimentBar').style.width = `${score}%`;
-        const text = document.getElementById('sentimentText');
-        if (score < 40) text.innerText = "SENTIMENTO: MEDO (HORA DE COMPRAR)";
-        else if (score > 60) text.innerText = "SENTIMENTO: GANÂNCIA (HORA DE CAUTELA)";
-        else text.innerText = "SENTIMENTO: MERCADO NEUTRO";
+        const score = Math.max(10, Math.min(90, 50 + (avg * 10)));
+        document.getElementById('sentimentFill').style.width = `${score}%`;
+        document.getElementById('sentimentText').innerText = score > 60 ? "SENTIMENTO: OTIMISMO" : (score < 40 ? "SENTIMENTO: MEDO" : "SENTIMENTO: NEUTRO");
     }
 
     function updateClock() {
@@ -233,9 +235,8 @@
         document.getElementById('statusText').innerText = `BOLSA ${isOpen ? 'ABERTA' : 'FECHADA'} | ${now.toLocaleTimeString('pt-BR')}`;
     }
 
-    applyTheme();
-    render();
+    start();
     setInterval(updateClock, 1000);
 </script>
 </body>
-</html> 
+</html>
