@@ -23,13 +23,11 @@
         .header { text-align: center; margin: 20px 0; }
         .header h1 { font-size: 1.3rem; font-weight: 900; color: var(--accent); text-transform: uppercase; }
 
-        /* Resumos de Estratégia no Cabeçalho */
         .legend-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 25px; }
         .legend-box { background: var(--card-bg); padding: 15px; border-radius: 12px; border: 1px solid var(--border); border-left: 5px solid var(--border); }
         .legend-box h3 { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
         .legend-box p { font-size: 0.55rem; color: var(--text-muted); line-height: 1.4; }
 
-        /* Controles e Filtros */
         .controls-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; align-items: center; }
         .filter-group { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
         .filter-btn { background: var(--card-bg); color: var(--text-muted); border: 1px solid var(--border); padding: 8px 15px; border-radius: 20px; font-size: 0.55rem; font-weight: 800; cursor: pointer; transition: 0.3s; }
@@ -38,7 +36,6 @@
         .btn-container { display: flex; gap: 8px; width: 100%; max-width: 400px; }
         .btn { flex: 1; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border); padding: 10px; border-radius: 8px; font-size: 0.6rem; font-weight: 800; cursor: pointer; }
 
-        /* Setores */
         .sector-section { margin-bottom: 10px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
         .sector-header { padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .sector-title { font-size: 0.7rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
@@ -48,7 +45,6 @@
         .grid { display: none; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; padding: 12px; background: var(--bg); }
         .expanded .grid { display: grid; }
 
-        /* Cards */
         .card { background: var(--card-bg); padding: 15px 10px; border-radius: 10px; border: 1px solid var(--border); text-align: center; }
         .opp-div { border: 2px solid var(--warning); }
         .opp-val { border: 2px solid var(--accent); }
@@ -67,7 +63,6 @@
         .info-line { display: flex; justify-content: space-between; margin-bottom: 3px; font-size: 0.55rem; font-weight: 800; }
         .info-label { color: var(--text-muted); font-size: 0.45rem; }
 
-        /* Rodapé */
         .market-footer { position: fixed; bottom: 0; width: 100%; height: 100px; background: var(--card-bg); border-top: 2px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
         .sentiment-container { width: 200px; height: 6px; background: #333; border-radius: 10px; margin: 8px 0; overflow: hidden; }
         .sentiment-bar { height: 100%; width: 50%; background: linear-gradient(90deg, var(--danger), var(--warning), var(--success)); transition: 1s; }
@@ -92,15 +87,15 @@
     <div class="legend-container">
         <div class="legend-box" style="border-left-color: var(--warning);">
             <h3 style="color: var(--warning);">🛒 Dividendos</h3>
-            <p>Foco em <b>Renda Passiva</b>. Ativos abaixo do Preço Teto para garantir um Yield mínimo. Ideal para fluxo de caixa constante.</p>
+            <p>Foco em <b>Renda Passiva</b>. Ativos abaixo do Preço Teto para garantir um Yield mínimo.</p>
         </div>
         <div class="legend-box" style="border-left-color: var(--accent);">
             <h3 style="color: var(--accent);">🚀 Valorização</h3>
-            <p>Foco em <b>Ganho de Capital</b>. Ativos abaixo do Preço Alvo projetado. Ideal para acumular patrimônio pelo crescimento da cotação.</p>
+            <p>Foco em <b>Ganho de Capital</b>. Ativos abaixo do Preço Alvo projetado.</p>
         </div>
         <div class="legend-box" style="border-left-color: var(--double);">
             <h3 style="color: var(--double);">💎 Oportunidade Dupla</h3>
-            <p>O <b>Cenário Perfeito</b>. O ativo está barato tanto para dividendos quanto para valorização. Margem de segurança máxima.</p>
+            <p>O <b>Cenário Perfeito</b>. Barato tanto para dividendos quanto para valorização.</p>
         </div>
     </div>
 
@@ -121,9 +116,6 @@
 </div>
 
 <div class="market-footer">
-    <div style="display: flex; gap: 15px; margin-bottom: 5px;">
-        <a href="https://statusinvest.com.br/" target="_blank" style="color:var(--accent); text-decoration:none; font-size:0.55rem; font-weight:800;">STATUS INVEST</a>
-    </div>
     <div id="sentimentText" style="font-size: 0.5rem; font-weight: 800; text-transform: uppercase;">Sentimento do Mercado</div>
     <div class="sentiment-container"><div id="sentimentFill" class="sentiment-bar"></div></div>
     <div style="display: flex; align-items: center; font-size: 0.6rem; font-weight: 800;">
@@ -140,14 +132,15 @@
         "SBSP3": [85.0, 72.0], "CSMG3": [22.0, 19.5], "SAPR11": [27.0, 24.0], "VIVT3": [48.0, 44.0], "HYPE3": [40.0, 32.0],
         "VALE3": [78.0, 62.0], "PRIO3": [58.0, 42.0], "BRAP4": [26.0, 21.5], "KLBN11": [24.5, 21.0], "WEGE3": [54.0, 25.0], "CSNA3": [18.5, 14.0],
         "MXRF11": [10.5, 10.0], "HGLG11": [165.0, 150.0], "BTHF11": [10.5, 9.8], "RBRR11": [98.0, 92.0], "ALZR11": [122.0, 112.0], "RBRP11": [72.0, 62.0], "VRTA11": [98.0, 91.0], "PCIP11": [96.0, 89.5], "XPLG11": [110.0, 102.0], "KNIP11": [100.0, 94.0],
-        "ABEV3": [16.5, 13.5], "LREN3": [22.0, 16.5], "MGLU3": [12.0, 8.0], "RENT3": [52.0, 44.0], "IVVB11": [310.0, 240.0], "INBR32": [38.50, 29.00], "KEPL3": [13.50, 11.20],"RAIL3": [28.50, 21.50]
+        "ABEV3": [16.5, 13.5], "LREN3": [22.0, 16.5], "MGLU3": [12.0, 8.0], "RENT3": [52.0, 44.0], "IVVB11": [310.0, 240.0], 
+        "INBR32": [38.50, 29.00], "KEPL3": [13.50, 11.20], "RAIL3": [28.50, 21.50]
     };
 
     const sectors = {
         "Bancos & Seguros": { "BBAS3": "Banco do Brasil", "ITUB4": "Itaú Unibanco", "BBDC4": "Bradesco", "SANB11": "Santander", "BBSE3": "BB Seguridade", "CXSE3": "Caixa Seguridade","INBR32": "Inter & Co" },
         "Energia & Elétricas": { "PETR4": "Petrobras", "ELET3": "Eletrobras", "TAEE11": "Taesa", "TRPL4": "ISA CTEEP", "CPLE6": "Copel" },
         "Saúde & Infra": { "SBSP3": "Sabesp", "CSMG3": "Copasa", "SAPR11": "Sanepar", "VIVT3": "Vivo", "HYPE3": "Hypera Pharma" },
-        "Commodities & Indústria": { "VALE3": "Vale S.A.", "PRIO3": "PetroRio", "BRAP4": "Bradespar", "KLBN11": "Klabin", "WEGE3": "WEG S.A.", "CSNA3": "Siderúrgica Nac.","KEPL3": "Kepler Weber" },"RAIL3": "Rumo Logística"},
+        "Commodities & Indústria": { "VALE3": "Vale S.A.", "PRIO3": "PetroRio", "BRAP4": "Bradespar", "KLBN11": "Klabin", "WEGE3": "WEG S.A.", "CSNA3": "Siderúrgica Nac.", "KEPL3": "Kepler Weber", "RAIL3": "Rumo Logística" },
         "FIIs & Imobiliário": { "MXRF11": "Maxi Renda", "HGLG11": "CSHG Log", "BTHF11": "BTG Hedge", "RBRR11": "RBR Rend.", "ALZR11": "Alianza Trust", "RBRP11": "RBR Prop.", "VRTA11": "Fator Veritá", "PCIP11": "Pátria Créd.", "XPLG11": "XP Log", "KNIP11": "Kinea Índices" },
         "Varejo & Consumo": { "ABEV3": "Ambev", "LREN3": "Lojas Renner", "MGLU3": "Magalu", "RENT3": "Localiza" },
         "Internacional": { "IVVB11": "S&P 500 ETF" }
@@ -160,15 +153,16 @@
         let totalVar = 0, count = 0;
 
         for (const [name, list] of Object.entries(sectors)) {
-            const id = name.replace(/\s/g, '');
+            const id = name.replace(/[^\w]/g, '');
             const sec = document.createElement('div');
-            sec.className = 'sector-section';
+            sec.className = 'sector-section expanded'; // Começa expandido
             sec.id = `sec-${id}`;
             sec.innerHTML = `<div class="sector-header" onclick="toggleSector('${id}')"><span class="sector-title">${name} (${Object.keys(list).length})</span><span class="arrow">▼</span></div><div class="grid" id="grid-${id}"></div>`;
             container.appendChild(sec);
             const grid = document.getElementById(`grid-${id}`);
 
             for (const ticker in list) {
+                await new Promise(r => setTimeout(r, 100)); // Delay p/ evitar erro 429
                 try {
                     const res = await fetch(`https://brapi.dev/api/quote/${ticker}?token=${API_TOKEN}`);
                     const data = await res.json();
@@ -212,10 +206,6 @@
         btn.classList.add('active');
         document.querySelectorAll('.card').forEach(card => {
             card.style.display = (type === 'all' || card.dataset.type === type) ? 'block' : 'none';
-        });
-        document.querySelectorAll('.sector-section').forEach(sec => {
-            const hasVisible = Array.from(sec.querySelectorAll('.card')).some(c => c.style.display !== 'none');
-            hasVisible ? sec.classList.add('expanded') : sec.classList.remove('expanded');
         });
     }
 
